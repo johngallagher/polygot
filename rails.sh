@@ -43,4 +43,4 @@ alias trsp='clear; date; bundle exec rspec; date'
 
 alias gpr='echo "bundle exec rspec"; bundle exec rspec; rc=$?; if [[ $rc == 0 ]]; then echo "All tests pass. Pushing..."; git push origin `git rev-parse --abbrev-ref HEAD`; else echo "Tests fail. Not pushing."; fi'
 
-alias gp='git push origin `git rev-parse --abbrev-ref HEAD`''
+alias gp='git push origin `git rev-parse --abbrev-ref HEAD`'
