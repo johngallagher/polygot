@@ -11,7 +11,7 @@ function load {
   CFG="${POLYGOT_HOME}/${1}.sh"
   if [[ -f $CFG ]]
   then
-    echo "poly : Loading $1"
+    # echo "poly : Loading $1"
     source $CFG
   else
     echo "poly : Error loading $1 - not recognised" >&2
@@ -28,7 +28,7 @@ then
   if [[ -f ./Polyfile ]]
   then
     source ./Polyfile
-  else 
+  else
     echo "No Polyfile found" >&2
   fi
 else
