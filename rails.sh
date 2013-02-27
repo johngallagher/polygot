@@ -41,7 +41,23 @@ alias rsp='clear; bundle exec rspec'
 
 alias trsp='clear; date; bundle exec rspec; date'
 
-alias grps='echo "bundle exec rspec"; bundle exec rspec; rc=$?; if [[ $rc == 0 ]]; then echo "All tests pass. Pushing..."; git push origin `git rev-parse --abbrev-ref HEAD`; else echo "Tests fail. Not pushing."; fi'
+alias gprs='echo "bundle exec rspec"; bundle exec rspec; rc=$?; if [[ $rc == 0 ]]; then echo "All tests pass. Pushing..."; git push origin `git rev-parse --abbrev-ref HEAD`; else echo "Tests fail. Not pushing."; fi'
 
 alias gps='git push origin `git rev-parse --abbrev-ref HEAD`'
-alias gpl='git pull origin `git rev-parse --abbrev-ref HEAD`'
+
+function gpl {
+  git pull origin `git rev-parse --abbrev-ref HEAD`
+  gemfile_changes=`git diff HEAD~1 Gemfile`
+  if [[ "$gemfile_changes" != "" ]]
+    then
+    echo "Gemfile has changed - running bundle install."
+    bundle install
+  fi
+
+  migration_changes=`git diff HEAD~1 db`
+  if [[ "$migration_changes" != "" ]]
+    then
+    echo "Migration detected - migrating database."
+    rdbm
+  fi
+}
