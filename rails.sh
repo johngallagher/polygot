@@ -41,8 +41,6 @@ alias rsp='clear; bundle exec rspec'
 
 alias trsp='clear; date; bundle exec rspec; date'
 
-alias gprs='echo "bundle exec rspec"; bundle exec rspec; rc=$?; if [[ $rc == 0 ]]; then echo "All tests pass. Pushing..."; git push origin `git rev-parse --abbrev-ref HEAD`; else echo "Tests fail. Not pushing."; fi'
-
 alias gps='git push origin `git rev-parse --abbrev-ref HEAD`'
 
 function gpl {
@@ -59,5 +57,17 @@ function gpl {
     then
     echo "Migration detected - migrating database."
     rdbm
+  fi
+}
+
+function gprs {
+  bundle exec rspec
+  rc=$?
+  if [[ $rc == 0 ]];
+    then
+    echo "All tests pass. Pushing..."
+    git push origin `git rev-parse --abbrev-ref HEAD`
+  else
+    echo "Tests fail. Not pushing."
   fi
 }
