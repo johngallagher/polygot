@@ -60,14 +60,22 @@ function gpl {
   fi
 }
 
+
 function gprs {
+  echo "Running rspec tests..."
   bundle exec rspec
-  rc=$?
-  if [[ $rc == 0 ]];
+  if [[ $? == 0 ]];
     then
-    echo "All tests pass. Pushing..."
-    git push origin `git rev-parse --abbrev-ref HEAD`
+    echo "Running cucumber features..."
+    bundle exec cucumber
+    if [[ $? == 0 ]];
+      then
+      echo "All tests pass. Pushing..."
+      git push origin `git rev-parse --abbrev-ref HEAD`
+    else
+      echo "Cucumber tests fail. Not pushing."
+    fi
   else
-    echo "Tests fail. Not pushing."
+    echo "Rspec tests fail. Not pushing."
   fi
 }
