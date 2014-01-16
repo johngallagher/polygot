@@ -72,9 +72,45 @@ function gpl {
   migrate_db
 }
 
+function open_url () {
+`osascript<<END
+tell application "Google Chrome"
+  set found_window to false
+  repeat with theWindow in windows
+    set i to 0
+    repeat with theTab in tabs of theWindow
+      set i to i + 1
+      set theURL to URL of theTab
+      if theURL is equal to "$1" then
+        activate
+        set active tab index of theWindow to i
+        reload theTab
+        set found_window to true
+      end if
+    end repeat
+  end repeat
+  if found_window is false then
+    activate
+    open location "$1"
+  end if
+end tell
+END`
+}
+
 function push_current_branch {
-  echo "All tests pass. Pushing..."
-  git push origin `git rev-parse --abbrev-ref HEAD`
+  current_branch=`git rev-parse --abbrev-ref HEAD`
+  git push origin $current_branch
+
+  ci_environment=current_branch
+  if [[ $ci_environment == "master" ]];
+    then
+    ci_environment="production"
+  fi
+  echo "Pushing $current_branch..."
+  git push origin $current_branch
+  dir_name=`basename $PWD`
+  url="http://ci.arnoldclark.com/job/$dir_name%20-%20$current_branch/"
+  open_url $url
 }
 
 function gprs {
@@ -89,11 +125,13 @@ function gprs {
       bundle exec cucumber
       if [[ $? == 0 ]];
         then
+        echo "All tests pass. Pushing..."
         push_current_branch
       else
         echo "Cucumber tests fail. Not pushing."
       fi
     else
+      echo "All tests pass. Pushing..."
       push_current_branch
     fi
   else
