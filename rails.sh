@@ -108,8 +108,8 @@ function push_current_branch {
   fi
   echo "Pushing $current_branch..."
   git push origin $current_branch
-  dir_name=`basename $PWD`
-  url="http://ci.arnoldclark.com/job/$dir_name%20-%20$current_branch/"
+  project_name=`basename $PWD`
+  url="http://ci.arnoldclark.com/job/$project_name%20-%20$ci_environment/"
   open_url $url
 }
 
