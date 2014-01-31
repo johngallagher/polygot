@@ -101,7 +101,7 @@ function push_current_branch {
   current_branch=`git rev-parse --abbrev-ref HEAD`
   git push origin $current_branch
 
-  ci_environment=current_branch
+  ci_environment=$current_branch
   if [[ $ci_environment == "master" ]];
     then
     ci_environment="production"
