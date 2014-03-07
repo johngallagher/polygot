@@ -1,3 +1,7 @@
+function current_git_branch {
+  echo `git rev-parse --abbrev-ref HEAD`
+}
+
 alias gc='git commit -m'
 alias ga='git add'
 alias gs='git status -sb'
@@ -17,5 +21,3 @@ if [ -f /usr/local/git/contrib/completion/git-prompt.sh ]; then
 fi
 export GIT_PS1_SHOWDIRTYSTATE=true
 
-# This messes up the prompt with oh my zsh
-#PS1='\[\033[32m\]$(rvm current)\[\033[00m\]:\[\033[34m\]$(basename $PWD)\[\033[31m\]$(__git_ps1)\[\033[00m\]\$ '

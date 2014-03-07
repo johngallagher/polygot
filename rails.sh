@@ -35,13 +35,17 @@ function restart {
 
 alias rdbm='echo Migrating db and prepping test db; bundle exec rake db:migrate db:test:prepare'
 
+alias rdbm='echo Migrating db and prepping test db; bundle exec rake db:migrate db:test:prepare'
+
+alias rdbms='echo Dropping db, migrating, seeding and prepping test db; bundle exec rake db:drop && bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rake db:seed && bundle exec rake db:test:prepare'
+
 alias tb='torquebox'
 
 alias rsp='clear; bundle exec rspec'
 
 alias trsp='clear; date; bundle exec rspec; date'
 
-alias gps='git push origin `git rev-parse --abbrev-ref HEAD`'
+alias gps='git push origin $(current_git_branch)'
 
 function bundle_install {
   count_of_gemfiles=`ls | grep '^Gemfile$' | wc -l`
@@ -66,7 +70,7 @@ function migrate_db {
 }
 
 function gpl {
-  git pull origin `git rev-parse --abbrev-ref HEAD`
+  git pull origin $(current_git_branch)
 
   bundle_install
   migrate_db
@@ -98,16 +102,15 @@ END`
 }
 
 function push_current_branch {
-  current_branch=`git rev-parse --abbrev-ref HEAD`
-  git push origin $current_branch
+  git push origin $(current_git_branch)
 
-  ci_environment=$current_branch
+  ci_environment=$(current_git_branch)
   if [[ $ci_environment == "master" ]];
     then
     ci_environment="production"
   fi
-  echo "Pushing $current_branch..."
-  git push origin $current_branch
+  echo "Pushing $(current_git_branch)..."
+  git push origin $(current_git_branch)
   project_name=`basename $PWD`
   url="http://ci.arnoldclark.com/job/$project_name%20-%20$ci_environment/"
   open_url $url
@@ -135,7 +138,7 @@ function gprs {
       push_current_branch
     fi
   else
-    echo "Rspec tests fail. Not pushing."
+    echo "Something went wrong. Maybe the tests failed? Not pushing."
   fi
 }
 
@@ -144,4 +147,8 @@ function gpprs {
   gpl
   echo "Pushing..."
   gprs
-    }
+}
+
+function gr {
+  `git rebase -i origin/$(current_git_branch)`
+}
