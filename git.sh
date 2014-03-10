@@ -11,6 +11,8 @@ alias gds='git diff --staged'
 alias gd='git diff'
 alias standup="clear; git log --since '1 day ago' --oneline --no-merges --pretty=format':%C(yellow)%h %C(white)%B' --author johngallagher"
 alias gco='git checkout'
+alias gpr='git pull --rebase'
+alias grb='git rebase -i @{u}'
 
 # Set git autocompletion and PS1 integration
 if [ -f /usr/local/git/contrib/completion/git-completion.bash ]; then

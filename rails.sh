@@ -70,7 +70,7 @@ function migrate_db {
 }
 
 function gpl {
-  git pull origin $(current_git_branch)
+  git pull --rebase origin $(current_git_branch)
 
   bundle_install
   migrate_db
@@ -147,8 +147,4 @@ function gpprs {
   gpl
   echo "Pushing..."
   gprs
-}
-
-function gr {
-  `git rebase -i origin/$(current_git_branch)`
 }
